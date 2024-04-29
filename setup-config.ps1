@@ -16,10 +16,10 @@ if($Uninstall) {
     oh-my-posh font uninstall "CascadiaCode"
     oh-my-posh font uninstall "FiraCode"
 
-    choco uninstall git
-    choco uninstall nushell
-    choco uninstall vscode-insiders
-    choco uninstall oh-my-posh
+    choco uninstall -y git
+    choco uninstall -y nushell
+    choco uninstall -y vscode-insiders
+    choco uninstall -y oh-my-posh
 
     Write-Host "Uninstalled"
     return
