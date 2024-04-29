@@ -1,5 +1,11 @@
 #Requires -RunAsAdministrator
 
+# check if we\re running as admin
+if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Warning "You need to run this script as an administrator"
+    return
+}
+
 # Install Chocolatey
 $ChocolateyFolder = 'C:\ProgramData\Chocolatey'
 if(Test-Path -Path $ChocolateyFolder ) {
