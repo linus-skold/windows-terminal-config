@@ -52,7 +52,7 @@ if($Uninstall) {
     $useAcrylic = $true
 
     $useAtlasEngine = $true
-    $fontFace = "Cascadia Mono"
+    $fontFace = "CaskaydiaCove Nerd Font"
     $fontSize = 10.0
 
     # Update Windows Terminal settings
