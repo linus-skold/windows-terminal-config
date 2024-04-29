@@ -2,7 +2,7 @@
 
 # Install Chocolatey
 $ChocolateyFolder = 'C:\ProgramData\Chocolatey'
-if(Test-Path -Path $Folder) {
+if(Test-Path -Path $ChocolateyFolder ) {
     "Chocolatey already installed, skipping."
 } else {
     $chocoInstall = Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
