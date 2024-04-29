@@ -4,24 +4,6 @@ param(
     [bool]$Uninstall = $false
 )
 
-function Set-Property {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$Settings,
-        [Parameter(Mandatory = $true)]
-        [string]$Field,
-        [Parameter(Mandatory = $true)]
-        [string]$Value
-    )
-
-    if($null -eq $Settings.$Field) {
-        $Settings | Add-Member -NotePropertyName $Field -NotePropertyValue $Value
-    } else {
-        $Settings.$Field = $Value
-    }
-}
-
-
 # check if we\re running as admin
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Warning "You need to run this script as an administrator"
@@ -65,24 +47,20 @@ if($Uninstall) {
 
     # Set Windows Terminal settings
     $settingsFilePath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-    $colorScheme = "One Half Dark"
-    $fontFace = "CaskaydiaMono Nerd Font Mono"
+    $colorScheme = "One Half Dark 2"
+    $fontFace = "Cascadia Mono 2"
     $opacity = 80
     $useAcrylic = $true
+    $useAtlasEngine = $true
 
     # Update Windows Terminal settings
     $settings = Get-Content $settingsFilePath | ConvertFrom-Json
 
-
-    if ($settings.profiles.defaults -eq $null) {
-        $settings.profiles.defaults = @{}
-    }
-    
-
-    Set-Property -Settings $settings.profiles.defaults -Field "colorScheme" -Value $colorScheme
-    Set-Property -Settings $settings.profiles.defaults -Field "font.face" -Value $fontFace
-    Set-Property -Settings $settings.profiles.defaults -Field "opacity" -Value $opacity
-    Set-Property -Settings $settings.profiles.defaults -Field "useAcrylic" -Value $useAcrylic
+    $settings.profiles.defaults | Add-Member -NotePropertyName "colorScheme" -NotePropertyValue $colorScheme -Force
+    $settings.profiles.defaults | Add-Member -NotePropertyName "opacity" -NotePropertyValue $opacity -Force
+    $settings.profiles.defaults | Add-Member -NotePropertyName "useAcrylic" -NotePropertyValue $useAcrylic -Force
+    $settings.profiles.defaults | Add-Member -NotePropertyName "useAtlasEngine" -NotePropertyValue $useAtlasEngine -Force
+    $settings.profiles.defaults.font | Add-Member -NotePropertyName "face" -NotePropertyValue $fontFace -Force
     
     $updatedSettings = $settings | ConvertTo-Json -Depth 50
     $updatedSettings | Set-Content $settingsFilePath
