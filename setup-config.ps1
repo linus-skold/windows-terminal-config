@@ -1,5 +1,7 @@
 #Requires -RunAsAdministrator
 
+Import-Module 
+
 param(
     [bool]$Uninstall = $false
 )
@@ -58,11 +60,11 @@ if($Uninstall) {
     # Update Windows Terminal settings
     $settings = Get-Content $settingsFilePath | ConvertFrom-Json
 
-    $settings.profiles.defaults.colorScheme = $colorScheme
-    $settings.profiles.defaults.font.face = "CaskaydiaMono Nerd Font Mono"
-    $settings.profiles.defaults.opacity = 80
-    $settings.profiles.defaults.useAcrylic = $true
-
+    $settings.profiles.defaults | Add-Member -NotePropertyName "colorScheme" -NotePropertyValue $colorScheme
+    $settings.profiles.defaults | Add-Member -NotePropertyName "font.face" -NotePropertyValue "CaskaydiaMono Nerd Font Mono"
+    $settings.profiles.defaults | Add-Member -NotePropertyName "opacity" -NotePropertyValue 80
+    $settings.profiles.defaults | Add-Member -NotePropertyName "useAcrylic" -NotePropertyValue $true
+    
     $updatedSettings = $settings | ConvertTo-Json -Depth 50
     $updatedSettings | Set-Content $settingsFilePath
 
