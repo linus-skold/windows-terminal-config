@@ -47,11 +47,13 @@ if($Uninstall) {
 
     # Set Windows Terminal settings
     $settingsFilePath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-    $colorScheme = "One Half Dark 2"
-    $fontFace = "Cascadia Mono 2"
+    $colorScheme = "One Half Dark"
     $opacity = 80
     $useAcrylic = $true
+
     $useAtlasEngine = $true
+    $fontFace = "Cascadia Mono"
+    $fontSize = 10.0
 
     # Update Windows Terminal settings
     $settings = Get-Content $settingsFilePath | ConvertFrom-Json
@@ -60,7 +62,11 @@ if($Uninstall) {
     $settings.profiles.defaults | Add-Member -NotePropertyName "opacity" -NotePropertyValue $opacity -Force
     $settings.profiles.defaults | Add-Member -NotePropertyName "useAcrylic" -NotePropertyValue $useAcrylic -Force
     $settings.profiles.defaults | Add-Member -NotePropertyName "useAtlasEngine" -NotePropertyValue $useAtlasEngine -Force
+    if($null -eq $settings.profiles.defaults.font) {
+        $settings.profiles.defaults | Add-Member -NotePropertyName "font" -NotePropertyValue @{} -Force
+    }
     $settings.profiles.defaults.font | Add-Member -NotePropertyName "face" -NotePropertyValue $fontFace -Force
+    $settings.profiles.defaults.font | Add-Member -NotePropertyName "size" -NotePropertyValue $fontSize -Force
     
     $updatedSettings = $settings | ConvertTo-Json -Depth 50
     $updatedSettings | Set-Content $settingsFilePath
