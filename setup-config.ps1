@@ -1,14 +1,21 @@
 #Requires -RunAsAdministrator
 
 # Install Chocolatey
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+$chocoInstall = Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+if($?) {
+    "successfully installed chocolatey"
+} else {
+    "failed to install chocolatey"
+    return
+}
 
 # Install packages
-choco install -y git
-choco install -y vscode-insiders
-choco install -y oh-my-posh
-oh-my-posh font install "CascadiaCode" 
-oh-my-posh font install "FiraCode" 
+$gitInstall = choco install -y git
+$codeInstall = choco install -y vscode-insiders
+$ompInstall = choco install -y oh-my-posh
+$cascadiaCodeInstall = oh-my-posh font install "CascadiaCode" 
+$firaCodeInstall = oh-my-posh font install "FiraCode" 
 
 # Set Windows Terminal settings
 $settingsFilePath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
@@ -26,13 +33,13 @@ $updatedSettings = $settings | ConvertTo-Json -Depth 50
 $updatedSettings | Set-Content $settingsFilePath
 
 # Install Nushell
-choco install -y nushell
+$nushellInstall = choco install -y nushell
 
 # Download & Install theme for Nushell
 $theme = "catppuccin_frappe"
 $themeURL = "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/$theme.omp.json"
 $themePath = "$env:APPDATA\nushell\themes\$theme.omp.json"
-Invoke-WebRequest -Uri "$themeURL" -OutFile "$themePath"
+$themeDownload = Invoke-WebRequest -Uri "$themeURL" -OutFile "$themePath"
 
 
 # setup an oh-my-posh config for nushell
