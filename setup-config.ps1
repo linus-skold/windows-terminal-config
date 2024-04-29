@@ -4,6 +4,24 @@ param(
     [bool]$Uninstall = $false
 )
 
+function Set-Property {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Settings,
+        [Parameter(Mandatory = $true)]
+        [string]$Field,
+        [Parameter(Mandatory = $true)]
+        [string]$Value
+    )
+
+    if($null -eq $Settings.$Field) {
+        $Settings | Add-Member -NotePropertyName $Field -NotePropertyValue $Value
+    } else {
+        $Settings.$Field = $Value
+    }
+}
+
+
 # check if we\re running as admin
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Warning "You need to run this script as an administrator"
@@ -11,20 +29,17 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 }
 
 if($Uninstall) {
-    Write-Host "Uninstalling..."
+    "Uninstalling..."
 
     oh-my-posh font uninstall "CascadiaCode"
     oh-my-posh font uninstall "FiraCode"
 
-    choco uninstall -y git
-    choco uninstall -y nushell
-    choco uninstall -y vscode-insiders
-    choco uninstall -y oh-my-posh
+    choco uninstall -y git nushell vscode-insiders oh-my-posh
 
-    Write-Host "Uninstalled"
+    "Uninstalled"
     return
 } else {
-    Write-Host "Installing..."
+    "Installing..."
     
     # Install Chocolatey
     $ChocolateyFolder = 'C:\ProgramData\Chocolatey'
@@ -42,10 +57,7 @@ if($Uninstall) {
 
     # Install packages
     "Starting to install packages"
-    choco install -y git
-    choco install -y vscode-insiders
-
-    choco install -y oh-my-posh
+    choco install -y git vscode-insiders oh-my-posh nushell
     $env:Path += ";$env:LOCALAPPDATA\Programs\oh-my-posh\bin"
 
     oh-my-posh font install "CascadiaCode" 
@@ -54,20 +66,26 @@ if($Uninstall) {
     # Set Windows Terminal settings
     $settingsFilePath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
     $colorScheme = "One Half Dark"
+    $fontFace = "CaskaydiaMono Nerd Font Mono"
+    $opacity = 80
+    $useAcrylic = $true
 
     # Update Windows Terminal settings
     $settings = Get-Content $settingsFilePath | ConvertFrom-Json
 
-    $settings.profiles.defaults | Add-Member -NotePropertyName "colorScheme" -NotePropertyValue $colorScheme
-    $settings.profiles.defaults | Add-Member -NotePropertyName "font.face" -NotePropertyValue "CaskaydiaMono Nerd Font Mono"
-    $settings.profiles.defaults | Add-Member -NotePropertyName "opacity" -NotePropertyValue 80
-    $settings.profiles.defaults | Add-Member -NotePropertyName "useAcrylic" -NotePropertyValue $true
+
+    if ($settings.profiles.defaults -eq $null) {
+        $settings.profiles.defaults = @{}
+    }
+    
+
+    Set-Property -Settings $settings.profiles.defaults -Field "colorScheme" -Value $colorScheme
+    Set-Property -Settings $settings.profiles.defaults -Field "font.face" -Value $fontFace
+    Set-Property -Settings $settings.profiles.defaults -Field "opacity" -Value $opacity
+    Set-Property -Settings $settings.profiles.defaults -Field "useAcrylic" -Value $useAcrylic
     
     $updatedSettings = $settings | ConvertTo-Json -Depth 50
     $updatedSettings | Set-Content $settingsFilePath
-
-    # Install Nushell
-    choco install -y nushell
 
     # Download & Install theme for Nushell
     $theme = "catppuccin_frappe"
