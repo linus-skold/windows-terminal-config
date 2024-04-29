@@ -1,13 +1,17 @@
 #Requires -RunAsAdministrator
 
 # Install Chocolatey
-$chocoInstall = Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-
-if($?) {
-    "successfully installed chocolatey"
+$ChocolateyFolder = 'C:\ProgramData\Chocolatey'
+if(Test-Path -Path $Folder) {
+    "Chocolatey already installed, skipping."
 } else {
-    "failed to install chocolatey"
-    return
+    $chocoInstall = Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+    if($?) {
+        "successfully installed chocolatey"
+    } else {
+        "failed to install chocolatey"
+        return
+    }
 }
 
 # Install packages
