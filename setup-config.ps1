@@ -78,6 +78,13 @@ if($Uninstall) {
     New-Item -ItemType Directory -Force -Path "$env:APPDATA\nushell\themes"
     Invoke-WebRequest -Uri "$themeURL" -OutFile "$themePath"
 
+    $nushellPath = "$env:APPDATA\nushell\"
+    #download the default config and env files
+    $defaultConfig = "https://raw.githubusercontent.com/nushell/nushell/main/crates/nu-utils/src/sample_config/default_config.nu"
+    $defaultEnv = "https://raw.githubusercontent.com/nushell/nushell/main/crates/nu-utils/src/sample_config/default_env.nu"
+    Invoke-WebRequest -Uri $defaultConfig -OutFile "$nushellPath\config.nu"
+    Invoke-WebRequest -Uri $defaultEnv -OutFile "$nushellPath\env.nu"  
+
     # setup an oh-my-posh config for nushell
     oh-my-posh init nu --config $themePath
     # add the oh-my-posh config to the nushell config
