@@ -1,7 +1,5 @@
 #Requires -RunAsAdministrator
 
-Import-Module 
-
 param(
     [bool]$Uninstall = $false
 )
