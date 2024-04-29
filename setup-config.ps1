@@ -15,9 +15,32 @@ if(Test-Path -Path $ChocolateyFolder ) {
 }
 
 # Install packages
+"Starting to install packages"
 $gitInstall = choco install -y git
+if($?) {
+    "successfully installed git"
+} else {
+    "failed to install git"
+    return
+}
+
 $codeInstall = choco install -y vscode-insiders
+if($?) {
+    "successfully installed vscode-insiders"
+} else {
+    "failed to install vscode-insiders"
+    return
+}
+
 $ompInstall = choco install -y oh-my-posh
+if($?) {
+    "successfully installed oh-my-posh"
+} else {
+    "failed to install oh-my-posh"
+    return
+}
+
+
 $cascadiaCodeInstall = oh-my-posh font install "CascadiaCode" 
 $firaCodeInstall = oh-my-posh font install "FiraCode" 
 
