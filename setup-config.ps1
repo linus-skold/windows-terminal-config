@@ -19,6 +19,8 @@ $settings = Get-Content $settingsFilePath | ConvertFrom-Json
 
 $settings.profiles.defaults.colorScheme = $colorScheme
 $settings.profiles.defaults.font.face = "CaskaydiaMono Nerd Font Mono"
+$settings.profiles.defaults.opacity = 80
+$settings.profiles.defaults.useAcrylic = true
 
 $updatedSettings = $settings | ConvertTo-Json -Depth 50
 $updatedSettings | Set-Content $settingsFilePath
