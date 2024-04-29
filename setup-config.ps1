@@ -13,8 +13,8 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 if($Uninstall) {
     "Uninstalling..."
 
-    oh-my-posh font uninstall "CascadiaCode"
-    oh-my-posh font uninstall "FiraCode"
+    # oh-my-posh font uninstall "CascadiaCode" # DOESN'T WORK
+    # oh-my-posh font uninstall "FiraCode" # DOESN'T WORK
 
     choco uninstall -y git nushell vscode-insiders oh-my-posh
 
