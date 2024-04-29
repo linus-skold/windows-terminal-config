@@ -90,4 +90,5 @@ if($Uninstall) {
     # add the oh-my-posh config to the nushell config
     "source ~/.oh-my-posh.nu" | Add-Content -Path "$env:APPDATA\nushell\config.nu"
 
+    (Get-Content "$env:APPDATA\nushell\config.nu") -Replace 'show_banner: true', 'show_banner: false' | Set-Content "$env:APPDATA\nushell\config.nu"
 }
