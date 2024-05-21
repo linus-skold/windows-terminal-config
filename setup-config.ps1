@@ -39,7 +39,7 @@ if($Uninstall) {
 
     # Install packages
     "Starting to install packages"
-    choco install -y git vscode-insiders oh-my-posh nushell
+    choco install -y git vscode-insiders oh-my-posh nushell fzf delta
     $env:Path += ";$env:LOCALAPPDATA\Programs\oh-my-posh\bin"
 
     oh-my-posh font install "CascadiaCode" 
