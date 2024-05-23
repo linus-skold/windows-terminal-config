@@ -91,4 +91,8 @@ if($Uninstall) {
     "source ~/.oh-my-posh.nu" | Add-Content -Path "$env:APPDATA\nushell\config.nu"
 
     (Get-Content "$env:APPDATA\nushell\config.nu") -Replace 'show_banner: true', 'show_banner: false' | Set-Content "$env:APPDATA\nushell\config.nu"
+
+    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+
+    "Reboot your PC for all changes to take effect."
 }
