@@ -10,13 +10,15 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     return
 }
 
+$chocoPackages = git vscode-insiders oh-my-posh nushell fzf delta
+
 if($Uninstall) {
     "Uninstalling..."
 
     # oh-my-posh font uninstall "CascadiaCode" # DOESN'T WORK
     # oh-my-posh font uninstall "FiraCode" # DOESN'T WORK
 
-    choco uninstall -y git nushell vscode-insiders oh-my-posh
+    choco uninstall -y $chocoPackages
 
     "Uninstalled"
     return
@@ -39,7 +41,8 @@ if($Uninstall) {
 
     # Install packages
     "Starting to install packages"
-    choco install -y git vscode-insiders oh-my-posh nushell fzf delta
+    choco install -y $chocoPackages    
+    
     $env:Path += ";$env:LOCALAPPDATA\Programs\oh-my-posh\bin"
 
     oh-my-posh font install "CascadiaCode" 
