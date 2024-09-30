@@ -10,7 +10,7 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     return
 }
 
-$chocoPackages = git vscode-insiders oh-my-posh nushell fzf delta
+$chocoPackages = git vscode-insiders oh-my-posh nushell fzf delta powertoys
 
 if($Uninstall) {
     "Uninstalling..."
